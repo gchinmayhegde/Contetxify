@@ -1,13 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Contextify</title>
   <style>
-    body { font-family: sans-serif; padding: 10px; width: 200px; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      padding: 16px;
+      width: 240px;
+    }
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      font-weight: bold;
+    }
+    select {
+      width: 100%;
+      padding: 6px;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
-  <h3>Contextify</h3>
-  <p>Double-click any word on a page to get a definition!</p>
+  <h3>Contextify Settings</h3>
+
+  <label for="themeSelect">Theme</label>
+  <select id="themeSelect">
+    <option value="auto">Auto (System)</option>
+    <option value="light">Light</option>
+    <option value="dark">Dark</option>
+  </select>
+
+  <label for="fontSelect">Font Style</label>
+  <select id="fontSelect">
+    <option value="sans">Sans-serif</option>
+    <option value="serif">Serif</option>
+  </select>
+
+  <script src="popup.js"></script>
 </body>
 </html>

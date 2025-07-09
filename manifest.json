@@ -3,7 +3,7 @@
   "name": "Contextify - Word Explainer",
   "description": "Double-click any word on a webpage to get definitions and context.",
   "version": "1.0",
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["activeTab", "scripting","storage"],
   "action": {
     "default_popup": "popup/popup.html",
     "default_icon": "icons/icon128.png"

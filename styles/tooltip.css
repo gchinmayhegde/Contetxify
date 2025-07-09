@@ -70,3 +70,61 @@
   padding: 0 2px;
   border-radius: 2px;
 }
+.contextify-tooltip {
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Theme Control */
+.contextify-tooltip[data-theme="light"] {
+  background: #ffffff;
+  color: #111111;
+}
+.contextify-tooltip[data-theme="dark"] {
+  background: #222222;
+  color: #f1f1f1;
+}
+
+/* Font Control */
+.contextify-tooltip[data-font="serif"] {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+.contextify-tooltip[data-font="sans"] {
+  font-family: 'Segoe UI', sans-serif;
+}
+/* Wikipedia snippet text */
+.contextify-tooltip .wiki-snippet {
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: inherit; /* inherit current theme color */
+}
+
+/* Highlighting inside snippet */
+.contextify-tooltip .wiki-snippet mark {
+  padding: 0 2px;
+  border-radius: 2px;
+  font-weight: bold;
+}
+
+/* Light theme overrides */
+.contextify-tooltip[data-theme="light"] .wiki-snippet mark {
+  background-color: #ffeb3b;
+  color: #000;
+}
+
+.contextify-tooltip[data-theme="light"] .wiki-snippet {
+  color: #222; /* darker text for visibility */
+}
+
+/* Dark theme overrides */
+.contextify-tooltip[data-theme="dark"] .wiki-snippet mark {
+  background-color: #ffd54f;
+  color: #111;
+}
+
+.contextify-tooltip[data-theme="dark"] .wiki-snippet {
+  color: #ddd;
+}
+.tooltip-close:hover {
+  color: #e53935;
+}

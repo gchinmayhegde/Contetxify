@@ -29,6 +29,18 @@ function showTooltip(x, y, htmlContent) {
   tooltip.style.top = `${y + 10}px`;
   tooltip.style.left = `${x + 10}px`;
   tooltip.innerHTML = htmlContent;
+
+  // 🆕 Apply user settings (theme & font)
+  chrome.storage.sync.get(["theme", "font"], (settings) => {
+    const theme = settings.theme || "auto";
+    const font = settings.font || "sans";
+
+    if (theme !== "auto") {
+      tooltip.setAttribute("data-theme", theme);
+    }
+    tooltip.setAttribute("data-font", font);
+  });
+
   document.body.appendChild(tooltip);
 
   setTimeout(removeExistingTooltip, 10000);
@@ -50,7 +62,7 @@ async function fetchWordData(word) {
     const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
     if (!res.ok) throw new Error("Word not found");
     const data = await res.json();
-    return data[0]; // First result
+    return data[0];
   } catch (err) {
     return { error: true, message: err.message };
   }
@@ -64,7 +76,6 @@ async function fetchWikipediaSnippet(word) {
     const data = await res.json();
     const snippet = data.query?.search?.[0]?.snippet;
     if (snippet) {
-      // Highlight the word in snippet
       const highlighted = snippet.replace(
         new RegExp(`(${word})`, "gi"),
         "<mark>$1</mark>"
