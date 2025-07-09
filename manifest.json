@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Contextify - Word Explainer",
+  "description": "Double-click any word on a webpage to get definitions and context.",
+  "version": "1.0",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": "icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["styles/tooltip.css"]
+    }
+  ],
+  "icons": {
+    "128": "icons/icon128.png"
+  }
+}
