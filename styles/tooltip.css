@@ -1,15 +1,60 @@
 .contextify-tooltip {
   position: absolute;
-  background: #222;
-  color: #fff;
-  padding: 10px;
-  border-radius: 6px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
-  z-index: 9999;
+  z-index: 10000;
+  width: 280px;
+  background: var(--contextify-bg);
+  color: var(--contextify-text);
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  padding: 14px;
+  font-family: 'Segoe UI', sans-serif;
   font-size: 14px;
-  width: 250px;
-  line-height: 1.4;
+  line-height: 1.6;
+  animation: fadeInScale 0.2s ease-out forwards;
+  opacity: 0;
+  transform: scale(0.95);
 }
-.contextify-tooltip audio {
+
+/* Themes */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --contextify-bg: #222;
+    --contextify-text: #f1f1f1;
+  }
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --contextify-bg: #fff;
+    --contextify-text: #222;
+  }
+}
+
+.word-card .word-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.word-card .phonetic {
+  font-size: 12px;
+  color: #888;
+}
+
+.word-card .definition,
+.word-card .example {
+  margin-bottom: 6px;
+}
+
+.word-card .audio {
+  margin-top: 8px;
   width: 100%;
+}
+
+@keyframes fadeInScale {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
