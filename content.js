@@ -5,21 +5,24 @@ document.addEventListener("dblclick", async (e) => {
     const y = e.pageY;
 
     removeExistingTooltip();
-    showTooltip(x, y, renderWordCard("Loading...", "", "", "", ""));
+    showTooltip(x, y, renderWordCard("Loading...", "", "", "", "", ""));
 
-    const wordData = await fetchWordData(selectedText.toLowerCase());
-    const html = formatWordCard(selectedText, wordData);
+    const word = selectedText.toLowerCase();
+    const [dictData, wikiSnippet] = await Promise.all([
+      fetchWordData(word),
+      fetchWikipediaSnippet(word)
+    ]);
+
+    const html = formatWordCard(word, dictData, wikiSnippet);
     updateTooltipContent(html);
   }
 });
 
-// Remove existing tooltip
 function removeExistingTooltip() {
   const oldTooltip = document.querySelector(".contextify-tooltip");
   if (oldTooltip) oldTooltip.remove();
 }
 
-// Show initial tooltip
 function showTooltip(x, y, htmlContent) {
   const tooltip = document.createElement("div");
   tooltip.className = "contextify-tooltip";
@@ -28,24 +31,20 @@ function showTooltip(x, y, htmlContent) {
   tooltip.innerHTML = htmlContent;
   document.body.appendChild(tooltip);
 
-  // Auto dismiss after 10s
   setTimeout(removeExistingTooltip, 10000);
 }
 
-// Dismiss on outside click
 document.addEventListener("click", (e) => {
   if (!e.target.closest(".contextify-tooltip")) {
     removeExistingTooltip();
   }
 });
 
-// Update tooltip content after data is fetched
 function updateTooltipContent(html) {
   const tooltip = document.querySelector(".contextify-tooltip");
   if (tooltip) tooltip.innerHTML = html;
 }
 
-// Fetch definition data
 async function fetchWordData(word) {
   try {
     const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
@@ -57,10 +56,30 @@ async function fetchWordData(word) {
   }
 }
 
-// Format and build visual word card HTML
-function formatWordCard(word, data) {
+async function fetchWikipediaSnippet(word) {
+  try {
+    const res = await fetch(
+      `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${word}&format=json&origin=*`
+    );
+    const data = await res.json();
+    const snippet = data.query?.search?.[0]?.snippet;
+    if (snippet) {
+      // Highlight the word in snippet
+      const highlighted = snippet.replace(
+        new RegExp(`(${word})`, "gi"),
+        "<mark>$1</mark>"
+      );
+      return highlighted + "...";
+    }
+    return null;
+  } catch (err) {
+    return null;
+  }
+}
+
+function formatWordCard(word, data, wikiSnippet) {
   if (data.error) {
-    return renderWordCard(word, "", `❌ ${data.message}`, "", "");
+    return renderWordCard(word, "", `❌ ${data.message}`, "", "", wikiSnippet);
   }
 
   const phonetic = data.phonetic || (data.phonetics?.[0]?.text || "");
@@ -69,11 +88,10 @@ function formatWordCard(word, data) {
   const definition = meaning?.definition || "No definition found.";
   const example = meaning?.example || "";
 
-  return renderWordCard(word, phonetic, definition, example, audio);
+  return renderWordCard(word, phonetic, definition, example, audio, wikiSnippet);
 }
 
-// Actual visual card layout
-function renderWordCard(word, phonetic, definition, example, audio) {
+function renderWordCard(word, phonetic, definition, example, audio, wikiSnippet) {
   return `
     <div class="word-card">
       <div class="word-head">
@@ -83,6 +101,11 @@ function renderWordCard(word, phonetic, definition, example, audio) {
       ${definition ? `<div class="definition">📖 ${definition}</div>` : ""}
       ${example ? `<div class="example">💡 <em>${example}</em></div>` : ""}
       ${audio ? `<audio controls src="${audio}" class="audio"></audio>` : ""}
+      ${
+        wikiSnippet
+          ? `<div class="wiki-snippet">🌐 <strong>Wikipedia:</strong><br><span>${wikiSnippet}</span></div>`
+          : ""
+      }
     </div>
   `;
 }

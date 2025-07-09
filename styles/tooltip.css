@@ -58,3 +58,15 @@
     transform: scale(1);
   }
 }
+.word-card .wiki-snippet {
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--contextify-text);
+}
+
+.word-card .wiki-snippet mark {
+  background-color: #ffd54f;
+  padding: 0 2px;
+  border-radius: 2px;
+}
